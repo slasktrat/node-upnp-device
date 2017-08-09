@@ -70,7 +70,7 @@ class ContentDirectory extends Service
   # Initialize redis conneciton.
   startDb: ->
     # Should probably create a private redis process here instead.
-    @redis = redis.createClient()
+    @redis = redis.createClient(process.env.REDIS_URL)
     @redis.on 'error', (err) -> console.log err if err?
     @redis.select 9
     @redis.flushdb()

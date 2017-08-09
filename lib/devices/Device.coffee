@@ -22,9 +22,11 @@ DeviceControlProtocol = require '../DeviceControlProtocol'
 
 class Device extends DeviceControlProtocol
 
-  constructor: (@name, address) ->
+  constructor: (@name, address, httpListenerPort) ->
     super
     @address = address if address?
+    @httpListenerPort = 0
+    @httpListenerPort = httpListenerPort if httpListenerPort?
     # Socket for listening and sending messages on SSDP broadcast address.
     @broadcastSocket = dgram.createSocket 'udp4', @ssdpListener
     @init()
@@ -45,7 +47,7 @@ class Device extends DeviceControlProtocol
       uuid: (cb) => @getUuid cb
       port: (cb) =>
         @httpServer = http.createServer(@httpListener)
-        @httpServer.listen 0, @address, (err) -> cb err, @address().port
+        @httpServer.listen @httpListenerPort, @address, (err) -> cb err, @address().port
       (err, res) =>
         return @emit 'error', err if err?
         @uuid = "uuid:#{res.uuid}"

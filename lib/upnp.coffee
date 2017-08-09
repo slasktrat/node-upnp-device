@@ -14,7 +14,7 @@ devices =
 
 # Returns a device which will emit the `ready` event when asynchronous
 # initialization operations finishes.
-exports.createDevice = (deviceType, name, address) ->
+exports.createDevice = (deviceType, name, address, port) ->
   type = deviceType.toLowerCase()
   unless type of devices
     device = new EventEmitter
@@ -22,7 +22,7 @@ exports.createDevice = (deviceType, name, address) ->
       new Error "UPnP device of type #{deviceType} is not yet implemented."
     return device
 
-  new devices[type] name, address
+  new devices[type] name, address, port
 
 # Returns a device which will emit the `ready` event when asynchronous
 # initialization operations finishes.
